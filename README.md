@@ -5,12 +5,10 @@ lorem
 ipsum
 lorem
 
-# ------------------------------
 ## Installation :
 lorem 
 ipsum
 lorem
-# ------------------------------
 
 ## Comment jouer ?
 
