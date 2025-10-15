@@ -42,10 +42,13 @@ def affiche_grille(grille):
 
 
 
-def place_bateau():
+def place_bateau(grille_bateaux):
+    """ list -> list,list
+        demande au joueur de rentrer les position des bateaux sur sa grille de jeu.
+        fait les vérication pour empêcher les bateaux d'être positionner en dehors de la grille ou par dessus d'autre bateaux
+        renvoie la grille ainsi qu'une liste  comprenant toutes les position occupés par les bateaux
     """
-    """
-    bateau_dispo= [3,3,10]
+    bateau_dispo= [2,3,3,4,5]
     pattern = r"^[A-J],(10|[1-9])$"
     while len(bateau_dispo)>0:
         entree_chiffre = False
@@ -155,3 +158,5 @@ def place_bateau():
                         case= tuple1[1]-1,ord(P1[0])-65+j
                         case_prise.append(case)
             affiche_grille(grille_bateaux)
+    print("Tout les bateaux ont été placés")
+    return grille_bateaux, case_prise
