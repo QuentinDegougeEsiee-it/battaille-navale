@@ -3,10 +3,10 @@ import re
 def suivant(joueur):
     """ int -> int
     prend en paramètre l'indice d'un joueur actuel et
-    renvoie l'indice du joueur suivant (0 ou 1)
+    renvoie l'indice du joueur suivant (1 ou 2)
     """
     if joueur == 1:
-        return 0
+        return 2
     else:
         return 1
     
@@ -24,7 +24,6 @@ def grille_vide():
     return tab1
 
 grille_bateaux = grille_vide()
-case_prise=[]
 
 
 def affiche_grille(grille):
@@ -48,7 +47,8 @@ def place_bateau(grille_bateaux):
         fait les vérication pour empêcher les bateaux d'être positionner en dehors de la grille ou par dessus d'autre bateaux
         renvoie la grille ainsi qu'une liste  comprenant toutes les position occupés par les bateaux
     """
-    bateau_dispo= [2,3,3,4,5]
+    case_prise=[]
+    bateau_dispo= [2]
     pattern = r"^[A-J],(10|[1-9])$"
     while len(bateau_dispo)>0:
         entree_chiffre = False
@@ -128,7 +128,6 @@ def place_bateau(grille_bateaux):
                     if ord(tuple1[0]) > ord(tuple2[0]):
                         for k in range(choix):
                             case_verif= tuple1[1]-1,ord(tuple1[0])-65-k
-                            print(case_verif)
                             if case_verif in case_prise:
                                 print("position invalide, les bateau se chevauchent")
                                 pos_valid=False
@@ -139,24 +138,71 @@ def place_bateau(grille_bateaux):
                         #ajoute le bateau dans la grille
                         grille_bateaux[tuple1[1]-j-1][ord(tuple1[0])-65] = '🚢'
                         #met à jour la liste des cases occupées par un bateau
-                        case= tuple1[1]-j-1,ord(P1[0])-65
+                        case= tuple1[1]-j-1,ord(tuple1[0])-65
                         case_prise.append(case)
                 else:
                     for j in range(choix):
                         grille_bateaux[tuple1[1]+j-1][ord(tuple1[0])-65] = '🚢'
-                        case= tuple1[1]+j-1,ord(P1[0])-65
+                        case= tuple1[1]+j-1,ord(tuple1[0])-65
                         case_prise.append(case)
             else:
                 if tuple1[0] > tuple2[0]:
                     for j in range(choix):
                         grille_bateaux[tuple1[1]-1][ord(tuple1[0])-65-j] = '🚢'
-                        case= tuple1[1]-1,ord(P1[0])-65-j
+                        case= tuple1[1]-1,ord(tuple1[0])-65-j
                         case_prise.append(case)
+                        print("1",case)
                 else:
                     for j in range(choix):
                         grille_bateaux[tuple1[1]-1][ord(tuple1[0])-65+j] = '🚢'
-                        case= tuple1[1]-1,ord(P1[0])-65+j
+                        case= tuple1[1]-1,ord(tuple1[0])-65+j
+                        print ("2",case)
                         case_prise.append(case)
             affiche_grille(grille_bateaux)
     print("Tout les bateaux ont été placés")
     return grille_bateaux, case_prise
+
+
+
+def attaquer(grille_attaque, grille_bateaux,case_occupee) :
+    """
+    """
+    affiche_grille(grille_attaque)
+    pattern = r"^[A-J],(10|[1-9])$"
+    tir_effectue= False
+    while tir_effectue is False:
+        valid_patern1=False
+        while valid_patern1 is False:
+            pos_tir = input("Veuillez rentrer la case ou vous souhaitez tirer (ex: A,1  ou J,10): ")
+            #vérifie que le format de la saisie correspond bien à [A-J],[1-10]
+            if re.match(pattern, pos_tir):
+                valid_patern1=True
+            else: 
+                print("Erreur dans le format de la saisie, le format doit être comme suit [A-J],[1-10]")
+        #convertit la saisie en tuple
+        colonne1,ligne1 = pos_tir.split(',')
+        colonne1= colonne1.strip()
+        colonne1= int(ord(colonne1)-65)
+        ligne1 = int(ligne1.strip())
+        ligne1-=1
+        tuple1 = (ligne1,colonne1)
+        
+        if grille_attaque[ligne1][colonne1] == '💥' or grille_attaque[ligne1][colonne1] == '🌊' :
+            print("Vous avez déjà tiré à cet endroit, merci de choisir d'autre coordonées ! ")
+        
+        elif grille_bateaux [ligne1][colonne1] == '🚢':
+            print("TOUCHÉ !!!")
+            grille_attaque[ligne1][colonne1] = '💥'
+            grille_bateaux[ligne1][colonne1] = '🔥'
+            print(tuple1)
+            print(case_occupee)
+            case_occupee.remove(tuple1)
+        
+        else :
+            print("RATÉ !")
+            grille_attaque[ligne1][colonne1] = '🌊'
+        return grille_attaque, grille_bateaux, case_occupee
+        
+
+
+                    
