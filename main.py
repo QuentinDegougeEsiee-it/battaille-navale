@@ -1,7 +1,8 @@
-from function import *
+import function as f
 
-grille_test=grille_vide()
 
-place_bateau(grille_test)
+grille_test=f.grille_vide()
+
+f.place_bateau(grille_test)
 
 
