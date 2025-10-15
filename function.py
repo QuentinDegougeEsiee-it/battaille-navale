@@ -1,3 +1,5 @@
+import re
+
 def suivant(joueur):
     """ int -> int
     prend en paramètre l'indice d'un joueur actuel et
@@ -14,22 +16,142 @@ def grille_vide():
     Les cases vides contiennent (" ").
     """
     tab1= []
-    tab2= []
     for j in range(10):
-        tab2.append(" ")
-    for i in range(10):
+        tab2= []
+        for i in range(10):
+            tab2.append("  ")
         tab1.append(tab2)
     return tab1
+
+grille_bateaux = grille_vide()
+case_prise=[]
+
 
 def affiche_grille(grille):
     """list -> void
         affiche la grille prise en argument en ajoutant les noms des lignes et colonnes
     """
     
-    print("     "+"    ".join(['A','B','C','D','E','F','G','H','I','J'])) 
+    print("      "+"     ".join(['A','B','C','D','E','F','G','H','I','J'])) 
     #met un espace initial puis affiche les éléments de la liste avec un espace identique entre chaque
 
-    for i in range(10):
+    for i in range(1,11):
 
-        print (f"{i+1:2}",grille[i])
+        print (f"{i:2}",grille[i-1])
         # affiche le numéro de la ligne en utilisant 2 espaces pour l'alignement  puis affiche la ligne de la grille correspondante
+
+
+
+def place_bateau():
+    """
+    """
+    bateau_dispo= [3,3,10]
+    pattern = r"^[A-J],(10|[1-9])$"
+    while len(bateau_dispo)>0:
+        entree_chiffre = False
+        #choix du type de bateau
+        while entree_chiffre is False:
+            print("il reste les bateaux de taille : ", bateau_dispo)
+            choix = input("quelle est la taille du bateau que vous souhaitez placer ? : ")
+            #vérifie le type de la valeur saisie
+            try:
+                choix= int(choix)
+                entree_chiffre=True
+            except:
+                print("la valeur saisie n'est pas valide")
+        if choix not in bateau_dispo:
+            print("votre choix n'est pas dans la liste des bateaux disponibles")
+        else:
+            #retire le bateau de la taille "choix" de la liste des  bateau disponible
+            bateau_dispo.remove(choix)
+            pos_valid = False
+            while pos_valid is False:
+                pos_valid=True
+                #demande de rentrer les valeurs des cases
+                valid_patern1=False
+                while valid_patern1 is False:
+                    P1 = input("Veuillez rentrer la première case de votre bateau en majuscule (ex: A,1  ou J,10): ")
+                    #vérifie que le format de la saisie correspond bien à [A-J],[1-10]
+                    if re.match(pattern, P1):
+                        valid_patern1=True
+                    else: 
+                        print("Erreur dans le format de la saisie, le format doit être comme suit [A-J],[1-10]")
+                #convertit la saisie en tuple
+                colonne1,ligne1 = P1.split(',')
+                colonne1= colonne1.strip()
+                ligne1 = int(ligne1.strip())
+                tuple1 = (colonne1,ligne1)
+                valid_patern2=False
+                while valid_patern2 is False:
+                    P2 = input("Veuillez rentrer la deuxième case de votre bateau en majuscule(ex: A,2): ")
+                    #vérifie que le format de la saisie correspond bien à [A-J],[1-10]
+                    if re.match(pattern, P2):
+                        valid_patern2=True
+                    else: 
+                        print("Erreur dans le format de la saisie, le format doit être comme suit [A-J],[1-10]")
+                #convertit la saisie en tuple
+                colonne2,ligne2 = P2.split(',')
+                colonne2= colonne2.strip()
+                ligne2 = int(ligne2.strip())
+                tuple2 = (colonne2,ligne2)
+
+                #vérifie si la taille du bateau est respecté(1x1)
+                if tuple1[0] == tuple2[0] and tuple1[1] == tuple2[1]:
+                    print("les position sont invalide, le bateau n'est pas de la bonne taille")
+                    pos_valid=False
+                #vérifie si le bateau n'est pas en diagonal    
+                elif tuple1[0] != tuple2[0] and tuple1[1] != tuple2[1]:
+                    print("les position sont invalide, le bateau ne peut pas être de diagonal")
+                    pos_valid=False
+
+                elif tuple1[0] == tuple2[0]:
+                    #vérifie si la taille du bateau est respecté(ligne)
+                    if tuple1[1] - tuple2[1] != choix-1 and tuple2[1] - tuple1[1] != choix-1:
+                        print("les position sont invalide, le bateau n'est pas de la bonne taille")
+                        pos_valid=False
+                    #vérifie si un autre bateau à déja été posé à cette position(ligne)
+                    for k in range(choix):
+                        case_verif= tuple1[1]-(k-1),ord(tuple1[0])-65
+                        if case_verif in case_prise:
+                            print("position invalide, les bateau se chevauchent")
+                            pos_valid=False
+                
+                #vérifie si la taille du bateau est respecté(colonne)
+                elif tuple1[1] == tuple2[1]:
+                    if ord(tuple1[0]) - ord(tuple2[0]) != choix-1 and ord(tuple2[0]) - ord(tuple1[0]) != choix-1:
+                        print("les position sont invalide, le bateau n'est pas de la bonne taille")
+                        pos_valid=False
+                    #vérifie si un autre bateau à déja été posé à cette position(colonne)
+                    if ord(tuple1[0]) > ord(tuple2[0]):
+                        for k in range(choix):
+                            case_verif= tuple1[1]-1,ord(tuple1[0])-65-k
+                            print(case_verif)
+                            if case_verif in case_prise:
+                                print("position invalide, les bateau se chevauchent")
+                                pos_valid=False
+            #fin des vérification, début du remplissage de la matrice bateau
+            if tuple1[0] == tuple2[0]:
+                if tuple1[1] > tuple2[1]:
+                    for j in range(choix):
+                        #ajoute le bateau dans la grille
+                        grille_bateaux[tuple1[1]-j-1][ord(tuple1[0])-65] = '🚢'
+                        #met à jour la liste des cases occupées par un bateau
+                        case= tuple1[1]-j-1,ord(P1[0])-65
+                        case_prise.append(case)
+                else:
+                    for j in range(choix):
+                        grille_bateaux[tuple1[1]+j-1][ord(tuple1[0])-65] = '🚢'
+                        case= tuple1[1]+j-1,ord(P1[0])-65
+                        case_prise.append(case)
+            else:
+                if tuple1[0] > tuple2[0]:
+                    for j in range(choix):
+                        grille_bateaux[tuple1[1]-1][ord(tuple1[0])-65-j] = '🚢'
+                        case= tuple1[1]-1,ord(P1[0])-65-j
+                        case_prise.append(case)
+                else:
+                    for j in range(choix):
+                        grille_bateaux[tuple1[1]-1][ord(tuple1[0])-65+j] = '🚢'
+                        case= tuple1[1]-1,ord(P1[0])-65+j
+                        case_prise.append(case)
+            affiche_grille(grille_bateaux)
