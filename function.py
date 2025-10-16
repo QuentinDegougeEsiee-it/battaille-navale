@@ -48,7 +48,7 @@ def place_bateau(grille_bateaux):
         renvoie la grille ainsi qu'une liste  comprenant toutes les position occupés par les bateaux
     """
     case_prise=[]
-    bateau_dispo= [3,3]
+    bateau_dispo= [3]
     pattern = r"^[A-J],(10|[1-9])$"
     while len(bateau_dispo)>0:
         entree_chiffre = False
@@ -61,9 +61,9 @@ def place_bateau(grille_bateaux):
                 choix= int(choix)
                 entree_chiffre=True
             except:
-                print("la valeur saisie n'est pas valide")
+                print("la valeur saisie n'est pas valide\n")
         if choix not in bateau_dispo:
-            print("votre choix n'est pas dans la liste des bateaux disponibles")
+            print("votre choix n'est pas dans la liste des bateaux disponibles \n")
         else:
             #retire le bateau de la taille "choix" de la liste des  bateau disponible
             bateau_dispo.remove(choix)
@@ -78,7 +78,7 @@ def place_bateau(grille_bateaux):
                     if re.match(pattern, P1):
                         valid_patern1=True
                     else: 
-                        print("Erreur dans le format de la saisie, le format doit être comme suit [A-J],[1-10]")
+                        print("Erreur dans le format de la saisie, le format doit être comme suit [A-J],[1-10]\n")
                 #convertit la saisie en tuple
                 colonne1,ligne1 = P1.split(',')
                 colonne1= colonne1.strip()
@@ -91,7 +91,7 @@ def place_bateau(grille_bateaux):
                     if re.match(pattern, P2):
                         valid_patern2=True
                     else: 
-                        print("Erreur dans le format de la saisie, le format doit être comme suit [A-J],[1-10]")
+                        print("Erreur dans le format de la saisie, le format doit être comme suit [A-J],[1-10]\n")
                 #convertit la saisie en tuple
                 colonne2,ligne2 = P2.split(',')
                 colonne2= colonne2.strip()
@@ -100,17 +100,17 @@ def place_bateau(grille_bateaux):
 
                 #vérifie si la taille du bateau est respecté(1x1)
                 if tuple1[0] == tuple2[0] and tuple1[1] == tuple2[1]:
-                    print("les position sont invalide, le bateau n'est pas de la bonne taille")
+                    print("les position sont invalide, le bateau n'est pas de la bonne taille\n")
                     pos_valid=False
                 #vérifie si le bateau n'est pas en diagonal    
                 elif tuple1[0] != tuple2[0] and tuple1[1] != tuple2[1]:
-                    print("les position sont invalide, le bateau ne peut pas être de diagonal")
+                    print("les position sont invalide, le bateau ne peut pas être de diagonal\n")
                     pos_valid=False
 
                 elif tuple1[0] == tuple2[0]:
                     #vérifie si la taille du bateau est respecté(ligne)
                     if tuple1[1] - tuple2[1] != choix-1 and tuple2[1] - tuple1[1] != choix-1:
-                        print("les position sont invalide, le bateau n'est pas de la bonne taille")
+                        print("les position sont invalide, le bateau n'est pas de la bonne taille\n")
                         pos_valid=False
                     #vérifie si un autre bateau à déja été posé à cette position(ligne)
                     #ici de bas en haut
@@ -118,20 +118,20 @@ def place_bateau(grille_bateaux):
                         for k in range(choix):
                             case_verif= tuple1[1]-k-1,ord(tuple1[0])-65
                             if case_verif in case_prise:
-                                print("position invalide, les bateau se chevauchent")
+                                print("position invalide, les bateau se chevauchent\n")
                                 pos_valid=False
                     # et ici de haut en bas
                     elif tuple1[1] < tuple2[1]:
                         for k in range(choix):
                             case_verif= tuple1[1]-k+1,ord(tuple1[0])-65
                             if case_verif in case_prise:
-                                print("position invalide, les bateau se chevauchent")
+                                print("position invalide, les bateau se chevauchent\n")
                                 pos_valid=False
                 
                 #vérifie si la taille du bateau est respecté(colonne)
                 elif tuple1[1] == tuple2[1]:
                     if ord(tuple1[0]) - ord(tuple2[0]) != choix-1 and ord(tuple2[0]) - ord(tuple1[0]) != choix-1:
-                        print("les position sont invalide, le bateau n'est pas de la bonne taille")
+                        print("les position sont invalide, le bateau n'est pas de la bonne taille\n")
                         pos_valid=False
                     #vérifie si un autre bateau à déja été posé à cette position(colonne)
                     #ici de droite à gauche
@@ -139,14 +139,14 @@ def place_bateau(grille_bateaux):
                         for k in range(choix):
                             case_verif= tuple1[1]-1,ord(tuple1[0])-65-k                            
                             if case_verif in case_prise:
-                                print("position invalide, les bateau se chevauchent")
+                                print("position invalide, les bateau se chevauchent\n")
                                 pos_valid=False
                     #et ici de gauche à droite            
                     elif ord(tuple1[0])<ord(tuple2[0]):
                         for k in range(choix):
                             case_verif= tuple1[1]-1,ord(tuple1[0])-65+k
                             if case_verif in case_prise:
-                                print("position invalide, les bateau se chevauchent")
+                                print("position invalide, les bateau se chevauchent\n")
                                 pos_valid=False
 
 
@@ -176,7 +176,7 @@ def place_bateau(grille_bateaux):
                         case= tuple1[1]-1,ord(tuple1[0])-65+j
                         case_prise.append(case)
             affiche_grille(grille_bateaux)
-    print("Tout les bateaux ont été placés")
+    print("Tout les bateaux ont été placés \n")
     return grille_bateaux, case_prise
 
 
@@ -201,7 +201,7 @@ def attaquer(grille_attaque, grille_bateaux,case_occupee) :
             if re.match(pattern, pos_tir):
                 valid_patern1=True
             else: 
-                print("Erreur dans le format de la saisie, le format doit être comme suit [A-J],[1-10]")
+                print("Erreur dans le format de la saisie, le format doit être comme suit [A-J],[1-10]\n")
         #convertit la saisie en tuple
         colonne1,ligne1 = pos_tir.split(',')
         colonne1= colonne1.strip()
@@ -211,11 +211,11 @@ def attaquer(grille_attaque, grille_bateaux,case_occupee) :
         tuple1 = (ligne1,colonne1)
         #vérifie que le joueur n'a pas déjà tiré dans cette case
         if grille_attaque[ligne1][colonne1] == '💥' or grille_attaque[ligne1][colonne1] == '🌊' :
-            print("Vous avez déjà tiré à cet endroit, merci de choisir d'autre coordonées ! ")
+            print("Vous avez déjà tiré à cet endroit, merci de choisir d'autre coordonées ! \n")
         
         #si le joueur touche : 
         elif grille_bateaux [ligne1][colonne1] == '🚢':
-            print("TOUCHÉ !!!")
+            print("TOUCHÉ !!! \n")
             grille_attaque[ligne1][colonne1] = '💥'
             grille_bateaux[ligne1][colonne1] = '🔥'
             case_occupee.remove(tuple1)
@@ -223,7 +223,7 @@ def attaquer(grille_attaque, grille_bateaux,case_occupee) :
         
         #si le joeur rate :
         else :
-            print("COULÉ !")
+            print("COULÉ !\n")
             grille_attaque[ligne1][colonne1] = '🌊'
             tir_effectue=True
     
