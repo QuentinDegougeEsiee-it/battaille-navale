@@ -1,4 +1,5 @@
 import re
+import random
 
 def suivant(joueur):
     """ int -> int
@@ -23,7 +24,6 @@ def grille_vide():
         tab1.append(tab2)
     return tab1
 
-grille_bateaux = grille_vide()
 
 
 def affiche_grille(grille):
@@ -48,7 +48,7 @@ def place_bateau(grille_bateaux):
         renvoie la grille ainsi qu'une liste  comprenant toutes les position occupés par les bateaux
     """
     case_prise=[]
-    bateau_dispo= [3]
+    bateau_dispo= [2,3,3,4,5]
     pattern = r"^[A-J],(10|[1-9])$"
     while len(bateau_dispo)>0:
         entree_chiffre = False
@@ -232,3 +232,115 @@ def attaquer(grille_attaque, grille_bateaux,case_occupee) :
 
 
                     
+def place_IA(grille_bateaux):
+    """ list -> list,list
+        place aléatoirement les bateaux sur la grille en argument
+        renvoie la grille avec les bateaux et les positions occupés par ces derniers
+    """
+    bateau_dispo= [2,3,3,4,5]
+    liste_direction = [1,2]
+
+    coord_dispo=[]
+    case_prise=[]
+    #crée une liste de toute les coordonées disponible pour placer les bateaux
+    for ligne in range(10):
+        for colonne in range(10):
+            coord_dispo.append((ligne,colonne))
+    #boucle qui continue tant que tous les bateaux ne sont pas placés
+    while len(bateau_dispo) > 0:
+        #choisi aléatoirement une taille de bateau et une coordonée
+        coord_choisie=random.choice(coord_dispo)
+        bateau_choisi= random.choice(bateau_dispo)
+        bateau_dispo.remove(bateau_choisi)
+        #choisi une direction pour placer le bateau (1: vers la droite, 2: vers le bas)
+        direction= random.choice(liste_direction)
+        pos_valid=False
+        while pos_valid is False :
+            pos_valid = True
+            orientation_valid = False
+            both_orientation_valid = 0
+            while orientation_valid is False and both_orientation_valid < 2: 
+                orientation_valid=True
+                #si la direction est vers la droite :
+                if direction == 1:
+                    #si le bateau sors de la grille :
+                    if coord_choisie[1]+bateau_choisi > 10 :
+                        orientation_valid = False 
+                        direction = 2
+                        both_orientation_valid+=1
+                    #vérifie si les case ne sont pas occupées par d'autres bateaux
+                    elif coord_choisie[1]+bateau_choisi <= 10 :
+                        for k in range(bateau_choisi):
+                            case_verif= coord_choisie[0],coord_choisie[1]+k                            
+                            if case_verif in case_prise:
+                                orientation_valid=False
+                                direction = 2
+                                both_orientation_valid+=1
+                #si la direction est vers le bas             
+                if direction == 2:
+                    #si le bateau sors de la grille :
+                    if coord_choisie[0]+bateau_choisi > 10 :
+                        orientation_valid = False 
+                        direction = 1
+                        both_orientation_valid+=1
+                    elif coord_choisie[0]+bateau_choisi <= 10 :
+                        for k in range(bateau_choisi):
+                            case_verif= coord_choisie[0]+k,coord_choisie[1]                            
+                            if case_verif in case_prise:
+                                orientation_valid=False
+                                direction = 1
+                                both_orientation_valid+=1
+            #si aucun des deux sens ne permet de placer le bateau: selectionne une autre coordonnée                    
+            if both_orientation_valid == 2:
+                coord_choisie=random.choice(coord_dispo)
+
+        #fin des vérifications, début du remplissage de la matrice bateau
+        #si direction vers la droite:
+        if direction == 1:
+                    for j in range(bateau_choisi):
+                        #ajoute le bateau dans la grille
+                        grille_bateaux[coord_choisie[0]][coord_choisie[1]+j] = '🚢'
+                        #met à jour la liste des cases occupées par un bateau
+                        case= coord_choisie[0],coord_choisie[1]+j
+                        case_prise.append(case)
+                        #retire la case des cases sélectionnables aléatoirement 
+                        coord_dispo.remove(case)
+
+        #si direction vers le bas
+        if direction == 2:
+                    for j in range(bateau_choisi):
+                        #ajoute le bateau dans la grille
+                        grille_bateaux[coord_choisie[0]+j][coord_choisie[1]] = '🚢'
+                        #met à jour la liste des cases occupées par un bateau
+                        case= coord_choisie[0]+j,coord_choisie[1]
+                        case_prise.append(case)
+                        #retire la case des cases sélectionnables aléatoirement 
+                        coord_dispo.remove(case)
+    affiche_grille(grille_bateaux)
+    return grille_bateaux,case_prise
+
+
+        
+
+
+
+    
+
+def attaquer_IA(tirs_dispo, grille_bateaux,case_occupee) :
+    """list,list,list -> list, list,list
+        choisi une case aléatoire dans tirs_dispo, tirs dans grille_bateaux à cette case puis retire la case de tirs_dispo
+        modifie grille_bateaux en fonction du résultat du tir
+    """
+    #choisis un tuple aléatoire dans tirs_dispo
+    tir= random.choice(tirs_dispo)
+    #vérifie le résultat du tir
+    if grille_bateaux [tir[0]][tir[1]] == '🚢':
+            print("L'ADVERSAIRE VOUS A TOUCHÉ !!! \n")
+            #modifie l'affichage de la case dans grille_bateaux et retire la case de case_occupée
+            grille_bateaux[tir[0]][tir[1]] = '🔥'
+            case_occupee.remove(tir)
+    else:
+        print("L'adversaire vous a manqué.")
+    #retire la coordonées des coordonées de tirs restante
+    tirs_dispo.remove(tir)
+    return tirs_dispo, grille_bateaux, case_occupee
