@@ -48,7 +48,7 @@ def place_bateau(grille_bateaux):
         renvoie la grille ainsi qu'une liste  comprenant toutes les position occupés par les bateaux
     """
     case_prise=[]
-    bateau_dispo= [2]
+    bateau_dispo= [3,3]
     pattern = r"^[A-J],(10|[1-9])$"
     while len(bateau_dispo)>0:
         entree_chiffre = False
@@ -113,11 +113,20 @@ def place_bateau(grille_bateaux):
                         print("les position sont invalide, le bateau n'est pas de la bonne taille")
                         pos_valid=False
                     #vérifie si un autre bateau à déja été posé à cette position(ligne)
-                    for k in range(choix):
-                        case_verif= tuple1[1]-(k-1),ord(tuple1[0])-65
-                        if case_verif in case_prise:
-                            print("position invalide, les bateau se chevauchent")
-                            pos_valid=False
+                    #ici de bas en haut
+                    elif tuple1[1] > tuple2[1]:
+                        for k in range(choix):
+                            case_verif= tuple1[1]-k-1,ord(tuple1[0])-65
+                            if case_verif in case_prise:
+                                print("position invalide, les bateau se chevauchent")
+                                pos_valid=False
+                    # et ici de haut en bas
+                    elif tuple1[1] < tuple2[1]:
+                        for k in range(choix):
+                            case_verif= tuple1[1]-k+1,ord(tuple1[0])-65
+                            if case_verif in case_prise:
+                                print("position invalide, les bateau se chevauchent")
+                                pos_valid=False
                 
                 #vérifie si la taille du bateau est respecté(colonne)
                 elif tuple1[1] == tuple2[1]:
@@ -125,12 +134,22 @@ def place_bateau(grille_bateaux):
                         print("les position sont invalide, le bateau n'est pas de la bonne taille")
                         pos_valid=False
                     #vérifie si un autre bateau à déja été posé à cette position(colonne)
-                    if ord(tuple1[0]) > ord(tuple2[0]):
+                    #ici de droite à gauche
+                    if ord(tuple1[0])>ord(tuple2[0]):
                         for k in range(choix):
-                            case_verif= tuple1[1]-1,ord(tuple1[0])-65-k
+                            case_verif= tuple1[1]-1,ord(tuple1[0])-65-k                            
                             if case_verif in case_prise:
                                 print("position invalide, les bateau se chevauchent")
                                 pos_valid=False
+                    #et ici de gauche à droite            
+                    elif ord(tuple1[0])<ord(tuple2[0]):
+                        for k in range(choix):
+                            case_verif= tuple1[1]-1,ord(tuple1[0])-65+k
+                            if case_verif in case_prise:
+                                print("position invalide, les bateau se chevauchent")
+                                pos_valid=False
+
+
             #fin des vérification, début du remplissage de la matrice bateau
             if tuple1[0] == tuple2[0]:
                 if tuple1[1] > tuple2[1]:
@@ -151,12 +170,10 @@ def place_bateau(grille_bateaux):
                         grille_bateaux[tuple1[1]-1][ord(tuple1[0])-65-j] = '🚢'
                         case= tuple1[1]-1,ord(tuple1[0])-65-j
                         case_prise.append(case)
-                        print("1",case)
                 else:
                     for j in range(choix):
                         grille_bateaux[tuple1[1]-1][ord(tuple1[0])-65+j] = '🚢'
                         case= tuple1[1]-1,ord(tuple1[0])-65+j
-                        print ("2",case)
                         case_prise.append(case)
             affiche_grille(grille_bateaux)
     print("Tout les bateaux ont été placés")
@@ -172,6 +189,7 @@ def attaquer(grille_attaque, grille_bateaux,case_occupee) :
         Modifie la grille de tir de joueur attaquant, la liste des bateau restant et  la grille des bateaux du joueur attaqué en conséquence
         et les retourne.
     """
+    print("voici ci-dessus les tirs précédemment effectués !")
     affiche_grille(grille_attaque)
     pattern = r"^[A-J],(10|[1-9])$"
     tir_effectue= False
