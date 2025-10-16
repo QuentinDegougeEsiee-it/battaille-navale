@@ -316,7 +316,6 @@ def place_IA(grille_bateaux):
                         case_prise.append(case)
                         #retire la case des cases sélectionnables aléatoirement 
                         coord_dispo.remove(case)
-    affiche_grille(grille_bateaux)
     return grille_bateaux,case_prise
 
 
