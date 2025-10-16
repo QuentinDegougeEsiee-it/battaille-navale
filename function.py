@@ -186,22 +186,25 @@ def attaquer(grille_attaque, grille_bateaux,case_occupee) :
         ligne1 = int(ligne1.strip())
         ligne1-=1
         tuple1 = (ligne1,colonne1)
-        
+        #vérifie que le joueur n'a pas déjà tiré dans cette case
         if grille_attaque[ligne1][colonne1] == '💥' or grille_attaque[ligne1][colonne1] == '🌊' :
             print("Vous avez déjà tiré à cet endroit, merci de choisir d'autre coordonées ! ")
         
+        #si le joueur touche : 
         elif grille_bateaux [ligne1][colonne1] == '🚢':
             print("TOUCHÉ !!!")
             grille_attaque[ligne1][colonne1] = '💥'
             grille_bateaux[ligne1][colonne1] = '🔥'
-            print(tuple1)
-            print(case_occupee)
             case_occupee.remove(tuple1)
+            tir_effectue=True
         
+        #si le joeur rate :
         else :
-            print("RATÉ !")
+            print("COULÉ !")
             grille_attaque[ligne1][colonne1] = '🌊'
-        return grille_attaque, grille_bateaux, case_occupee
+            tir_effectue=True
+    
+    return grille_attaque, grille_bateaux, case_occupee
         
 
 
