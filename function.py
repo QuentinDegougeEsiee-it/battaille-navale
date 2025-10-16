@@ -165,7 +165,11 @@ def place_bateau(grille_bateaux):
 
 
 def attaquer(grille_attaque, grille_bateaux,case_occupee) :
-    """
+    """ list,list,list -> list, list, list
+        Demande la coordonée du tir au joueur, 
+        Vérifie que la coordonée est valide et qu'il n'y a pas déjà eu de tir au même emplacement,
+        Modifie la grille de tir de joueur attaquant, la liste des bateau restant et  la grille des bateaux du joueur attaqué en conséquence
+        et les retourne.
     """
     affiche_grille(grille_attaque)
     pattern = r"^[A-J],(10|[1-9])$"
