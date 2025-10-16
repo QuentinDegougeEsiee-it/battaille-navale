@@ -6,7 +6,7 @@ Venez jouez, seul ou à plusieurs à ce célèbre jeu de hasard pour passer des 
 
 ## Installation :
 installer python et le module regex
-ouvrir le projet avec un logiciel acceptant python et lancer le code
+ouvrir le projet avec un logiciel acceptant python et lancer le code du fichier "main"
 
 ## Règles:
 - Deux joueurs possèdent chacun une grille 10x10 sur laquelle ils placent 5 bateaux.
