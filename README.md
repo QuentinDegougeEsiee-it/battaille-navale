@@ -19,6 +19,7 @@ ouvrir le projet avec un logiciel acceptant python et lancer le code du fichier 
 - Chaque joueur attaque une case de la grille adverse à tour de rôle.
 Objectif : Couler tous les bateaux de l’adversaire en touchant toutes les cases de chaque
 bateau.
+Le Premier joueur à remplir l'objectif gagne la partie ! 
 
 
 ## Comment jouer ?
