@@ -215,7 +215,7 @@ def attaquer(grille_attaque, grille_bateaux,case_occupee) :
         
         #si le joueur touche : 
         elif grille_bateaux [ligne1][colonne1] == '🚢':
-            print("TOUCHÉ !!! \n")
+            print("\n TOUCHÉ !!! \n")
             grille_attaque[ligne1][colonne1] = '💥'
             grille_bateaux[ligne1][colonne1] = '🔥'
             case_occupee.remove(tuple1)
@@ -223,7 +223,7 @@ def attaquer(grille_attaque, grille_bateaux,case_occupee) :
         
         #si le joeur rate :
         else :
-            print("COULÉ !\n")
+            print("\n COULÉ !\n")
             grille_attaque[ligne1][colonne1] = '🌊'
             tir_effectue=True
     
@@ -303,7 +303,7 @@ def place_IA(grille_bateaux):
                         #met à jour la liste des cases occupées par un bateau
                         case= coord_choisie[0],coord_choisie[1]+j
                         case_prise.append(case)
-                        #retire la case des cases sélectionnables aléatoirement 
+                        #retire la case des cases sélectionnables aléatoirement                         
                         coord_dispo.remove(case)
 
         #si direction vers le bas
