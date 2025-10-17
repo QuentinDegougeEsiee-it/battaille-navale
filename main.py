@@ -175,8 +175,4 @@ else:
         elif len(cases_occupees_j1)==0:
             print("L'adversaire a coulé tous les navires du joueur 1 !!","\n VICTOIRE DE L'ADVERSAIRE !!!\n")
             print("FIN -----------------------------------------")
-            jeu_solo = False
-
-
-       
-
+            jeu_solo = False    
