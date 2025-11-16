@@ -1,5 +1,9 @@
 import re
 import random
+import json
+import os
+
+
 
 def suivant(joueur):
     """ int -> int
@@ -48,7 +52,7 @@ def place_bateau(grille_bateaux):
         renvoie la grille ainsi qu'une liste  comprenant toutes les position occupés par les bateaux
     """
     case_prise=[]
-    bateau_dispo= [2,3,3,4,5]
+    bateau_dispo= [2,3]
     pattern = r"^[A-J],(10|[1-9])$"
     while len(bateau_dispo)>0:
         entree_chiffre = False
@@ -237,7 +241,7 @@ def place_IA(grille_bateaux):
         place aléatoirement les bateaux sur la grille en argument
         renvoie la grille avec les bateaux et les positions occupés par ces derniers
     """
-    bateau_dispo= [2,3,3,4,5]
+    bateau_dispo= [2,3]
     liste_direction = [1,2]
 
     coord_dispo=[]
@@ -343,3 +347,49 @@ def attaquer_IA(tirs_dispo, grille_bateaux,case_occupee) :
     #retire la coordonées des coordonées de tirs restante
     tirs_dispo.remove(tir)
     return tirs_dispo, grille_bateaux, case_occupee
+
+
+
+def save_bateaux_joueur(liste_bateaux_joueur_not_json):
+    """crée et sauvegarde dans un fichier json l'emplacement et l'état des bateaux du joueur"""
+    if os.path.exists("liste_bateaux_joueur.json"):
+        os.remove("liste_bateaux_joueur.json")
+    with open("liste_bateaux_joueur.json", "w") as f:
+        json.dump(liste_bateaux_joueur_not_json, f, indent=4)
+
+
+def save_bateaux_IA(liste_bateaux_IA_not_json):
+    """crée et sauvegarde dans un fichier json l'emplacement et l'état des bateaux de l'IA"""
+    if os.path.exists("liste_bateaux_IA.json"):
+        os.remove("liste_bateaux_IA.json")
+    with open("liste_bateaux_IA.json", "w") as f:
+        json.dump(liste_bateaux_IA_not_json, f, indent=4)
+
+def save_Tirs_IA(liste_Tirs_IA_not_json):
+    """crée et sauvegarde dans un fichier json l'emplacement et l'état des Tirs de l'IA """
+    if os.path.exists("liste_Tirs_IA.json"):
+        os.remove("liste_Tirs_IA.json")
+    with open("liste_Tirs_IA.json", "w") as f:
+        json.dump(liste_Tirs_IA_not_json, f, indent=4)
+
+def save_Tirs_joueur(liste_Tirs_joueur_not_json):
+    """crée et sauvegarde dans un fichier json l'emplacement et l'état des Tirs du joueur """
+    if os.path.exists("liste_Tirs_joueur.json"):
+        os.remove("liste_Tirs_joueur.json")
+    with open("liste_Tirs_joueur.json", "w") as f:
+        json.dump(liste_Tirs_joueur_not_json, f, indent=4)
+
+def save_cases_occupées_joueur(cases_occupé_joueur_not_json):
+    """crée et sauvegarde dans un fichier json l'emplacement des cases occupé  du joueur """
+    if os.path.exists("cases_occupées_joueur.json"):
+        os.remove("cases_occupées_joueur.json")
+    with open("cases_occupées_joueur.json", "w") as f:
+        json.dump(cases_occupé_joueur_not_json, f, indent=4)
+
+def save_cases_occupées_IA(cases_occupées_IA_not_json):
+    """crée et sauvegarde dans un fichier json l'emplacement des cases occupé  du joueur """
+    if os.path.exists("cases_occupées_IA.json"):
+        os.remove("cases_occupées_IA.json")
+    with open("cases_occupées_IA.json", "w") as f:
+        json.dump(cases_occupées_IA_not_json, f, indent=4)
+
